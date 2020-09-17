@@ -1,0 +1,50 @@
+Sqoop Commands
+
+import a table from database to a specific place
+-----------------------------------------------------
+sqoop import --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 --table tbl_enq -m 1 --target-dir /Luminar/Enquirey
+
+
+
+import all tables from a database 
+-----------------------------------
+sqoop import-all-tables --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 -m 1 ;
+
+
+
+import all tables to a specific folder
+----------------------------------------------
+sqoop import-all-tables --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 -m 1 --warehouse-dir  /Luminar/tables;
+
+
+sqoop import --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 --table tb_student --where "stud_qualification='Btech'" -m 1 --target-dir /Luminar/studentData
+
+
+sqoop import --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 --table tbl_staff --where "staff_id=12 and staff_fname='sajay'" -m 1 --target-dir /Luminar/staffDat
+
+
+
+sqoop import --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 --table tbl_enq --where "enq_id=1" -m 1 --target-dir /Luminar/enqNew
+
+
+sqoop import-all-tables --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 -m 1 --warehouse-dir /Luminar/Second1 --exclude-tables tbl_enq,tbl_staff;
+
+export table
+..................
+
+sqoop export --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 --table tbl_staff --export-dir /user/hduser/tbl_staff; 
+
+INCRIMENT----To update a file 
+-------------------------------------
+
+sqoop import --connect jdbc:mysql://localhost/db_Luminar --username root --password Password@123 --table tbl_staff -m 1 --target-dir /user/hduser/tbl_staff --incremental append --check-column staff_id --last-value 13;
+
+
+
+
+
+
+
+
+
+

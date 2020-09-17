@@ -1,0 +1,84 @@
+From the Patent file:
+1.Find the row count of the file       --17571
+select count(*) from patent;
+
+2.Remove the duplicates and then store the result in a view       --16681
+create view v_dis_patent as select distinct p_id,p_subid from patent;
+
+3.Find the patent and count of subpatent and store this result in a view. --991
+create view v_patent_count as select p_id,COUNT(p_subid) from v_dis_patent group by p_id;
+
+4.From the above VIEW,print the count(subpatent) in DESC order
+select p_id,COUNT(p_subid) as patent_count from v_dis_patent group by p_id order by patent_count DESC;
+
+5.Find the top 5 subpatent--ie from the count of subpatent
+select p_id,COUNT(p_subid) as patent_count from v_dis_patent group by p_id order by patent_count DESC limit 5;
+
+6.Find the lowest 10 subpatent?
+select p_id,COUNT(p_subid) as patent_count from v_dis_patent group by p_id order by patent_count limit 10;
+
+7.Print the patent and subpatent where COUNT(subpatent) is >=25; --206
+create view v_patent_25 as select p_id,patent_count from v_patent_count where patent_count>=25;
+---------------------------------------------------------------------------------
+From custom and order files:
+
+1.Get the id,name,age,sal from custom and amt,orderid from order by joining the tables.
+ select c.c_id,c.c_name,c.c_age,c.c_sal,o.o_id,o.o_amt from custom c join order o ON (c.c_id=o.o_cusid);
+
+2.Get the id,name,address from custom and get all the details from order table 
+select c.c_id,c.c_name,c.c_loc,o.* from custom c join order o ON c.c_id=o.o_cusid;
+
+3. Get the id,name,add,amt,date where customer id is 3
+select c.c_id,c.c_name,c.c_loc,o.o_date,o.o_amt from custom c join order o ON c.c_id=o.o_cusid where c.c_id=3;
+
+4.  Get the id,name,add,amt,date where customer id is 3 and amount =3000
+select c.c_id,c.c_name,c.c_loc,o.o_date,o.o_amt from custom c join order o ON c.c_id=o.o_cusid where c.c_id=3 and o.o_amt=3000;
+
+5.Get full details of customer,date and amount from order table where customer id is max
+select c.*,o.o_date,o.o_amt from custom c join order o ON c.c_id=o.o_cusid order by c.c_id desc limit 1;
+
+6.Get the id,name of customers with customer id is 3;(here we get a duplicate result so to avoid that we use distinct in the query)
+select distinct c.c_id,c.c_name from custom c join order o ON c.c_id=o.o_cusid where c.c_id=3;
+
+7.get name age,add and date from the latest date
+ select c.c_name,c.c_age,c.c_loc,o.o_date from custom c join order o ON (c.c_id=o.o_cusid) order by o.o_date desc limit 1;
+
+8.get name age,add,amount and date of the customers who have paid the least amount.
+select c.c_name,c.c_age,c.c_loc,o.o_date,o.o_amt from custom c join order o ON (c.c_id=o.o_cusid) order by o.o_amt limit 1;
+
+
+-----------------------------------------------------------------------------------
+Use student and result files:
+----------------------------------
+1.find row count of student --20
+ select COUNT(*) from student;
+
+2.Find row count of result --20
+ select COUNT(*) from result;
+
+3.get the name and roll number of students who has passed.
+select s.name,s.id from student s join result r ON (s.id=r.id) where res='pass';
+
+left outer join
+-------------------
+4.get id,and corresponding customer id  count from the left outer join result
+select c.c_id,count(c.c_id) from custom c left outer join order o ON (c.c_id=o.o_cusid) group by c.c_id;
+
+5.get id,and corresponding customer id  count from the left outer join result and put the count(id) as desc
+select c.c_id,count(*) as r from custom c left outer join order o ON (c.c_id=o.o_cusid) group by c.c_id order by r desc;
+
+right outer join
+-----------------
+6.Get the customer details from the right table where the purchasing date is latest
+select c.c_id,c.c_name,o.o_amt,o.o_date from custom c right outer join order o ON (c.c_id=o.o_cusid) order by o.o_date desc limit 1;
+
+7.get the customer details from the right table who have payed the lowest amount 
+
+8.get the customer details having a row in the right table where customer id >=2 salary >=4500
+select c.c_id,c.c_name,c.c_sal,o.o_amt,o.o_date from custom c right outer join order o ON (c.c_id=o.o_cusid) where c.c_id>=2 and c.c_sal>=4500;
+
+full outer join
+------------------
+1.find the row count of both custom and order tables together.
+------------------------------------------------------------------------------------
+
